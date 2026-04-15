@@ -20,8 +20,7 @@
   </div>
 
   <script>
-    const API = "http://localhost:3000";
-
+    const API = "https://todo-list-app-0p2s.onrender.com";
     async function loadTasks() {
       const res = await fetch(API + "/tasks");
       const tasks = await res.json();
