@@ -4,21 +4,19 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-  "start": "node index.js",
-  "build": "npm install --build-from-source sqlite3"
-},
+    "start": "node index.js"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "better-sqlite3": "^12.9.0",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
-    "express": "^5.2.1",
-    "sqlite3": "^6.0.1"
+    "express": "^5.2.1"
   },
   "engines": {
     "node": "20.x"
   }
-  
 }
