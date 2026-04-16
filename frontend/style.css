@@ -2,6 +2,7 @@
     --primary: #2563eb;
     --dark: #1e293b;
     --light: #f8fafc;
+    --header-height: 70px; /* On définit une variable pour la hauteur */
 }
 
 body {
@@ -10,10 +11,17 @@ body {
     background-color: var(--light);
 }
 
+/* --- HEADER CORRIGÉ --- */
 header {
     background: var(--dark);
-    padding: 1rem 2rem;
+    height: var(--header-height); /* Hauteur fixe */
+    display: flex;
+    align-items: center; /* Centre verticalement le logo et le burger */
+    padding: 0 2rem;
     color: white;
+    position: sticky; /* Reste en haut au scroll */
+    top: 0;
+    z-index: 1000;
 }
 
 nav {
@@ -22,15 +30,24 @@ nav {
     align-items: center;
     max-width: 1000px;
     margin: 0 auto;
+    width: 100%;
 }
 
 .logo { font-weight: bold; font-size: 1.5rem; }
 .logo span { color: var(--primary); }
 
-.nav-links { list-style: none; display: flex; gap: 20px; }
+.nav-links { 
+    list-style: none; 
+    display: flex; 
+    gap: 20px; 
+    margin: 0; 
+    padding: 0;
+}
+
 .nav-links a { color: #cbd5e1; text-decoration: none; font-size: 0.9rem; transition: 0.3s; }
 .nav-links a:hover { color: white; }
 
+/* --- CONTENU --- */
 main { max-width: 800px; margin: 40px auto; padding: 0 20px; }
 
 .card {
@@ -55,3 +72,58 @@ input { flex: 1; padding: 12px; border: 1px solid #e2e8f0; border-radius: 8px; o
 }
 
 .badge-online { background: #dcfce7; color: #166534; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; }
+
+/* --- BURGER --- */
+.burger {
+    display: none;
+    cursor: pointer;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.burger span {
+    width: 25px;
+    height: 3px;
+    background-color: white;
+    border-radius: 2px;
+    transition: 0.3s;
+}
+
+/* --- RESPONSIVE MOBILE CORRIGÉ --- */
+@media screen and (max-width: 768px) {
+    .nav-links {
+        position: fixed;
+        right: -100%; 
+        top: var(--header-height); /* Se colle exactement sous le header */
+        flex-direction: column;
+        background: var(--dark);
+        width: 100%;
+        height: calc(100vh - var(--header-height)); /* Prend tout le reste de l'écran */
+        text-align: center;
+        transition: 0.4s ease-in-out;
+        box-shadow: 0 10px 10px rgba(0,0,0,0.2);
+        padding: 40px 0;
+        z-index: 999;
+    }
+
+    .nav-links.active {
+        right: 0; 
+    }
+
+    .nav-links li {
+        margin: 15px 0;
+    }
+
+    .nav-links a {
+        font-size: 1.2rem;
+    }
+
+    .burger {
+        display: flex; 
+    }
+
+    /* Animation du burger */
+    .burger.toggle span:nth-child(1) { transform: rotate(-45deg) translate(-5px, 6px); }
+    .burger.toggle span:nth-child(2) { opacity: 0; }
+    .burger.toggle span:nth-child(3) { transform: rotate(45deg) translate(-5px, -6px); }
+}

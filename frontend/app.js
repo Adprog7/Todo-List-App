@@ -39,60 +39,104 @@ const pages = {
         </div>
         <div class="card">
             <ul>
-                <li><strong>Backend :</strong> Render (Node.js) </li>
-                <li><strong>Frontend :</strong> Vercel (PaaS) </li>
-                <li><strong>Sécurité :</strong> HTTPS SSL activé </li>
+                <li><strong>Backend :</strong> Render (Node.js)</li>
+                <li><strong>Frontend :</strong> Vercel (PaaS)</li>
+                <li><strong>Sécurité :</strong> HTTPS SSL activé</li>
                 <li><strong>Status :</strong> <span class="badge-online">En ligne</span></li>
             </ul>
         </div>
     `
 };
 
+// Éléments du DOM pour le menu burger
+const burger = document.getElementById('burger');
+const nav = document.getElementById('nav-links');
+
+// UNE SEULE fonction navigateTo pour tout gérer
 async function navigateTo(pageId) {
     const content = document.getElementById('content');
-    content.innerHTML = pages[pageId];
     
+    // On injecte le contenu de la page
+    if (pages[pageId]) {
+        content.innerHTML = pages[pageId];
+    }
+
+    // On ferme le menu burger s'il est ouvert (Mobile)
+    if (nav && burger) {
+        nav.classList.remove('active');
+        burger.classList.remove('toggle');
+    }
+
+    // On lance les chargements spécifiques
     if (pageId === 'todo') loadTasks();
     if (pageId === 'stats') updateStats();
 }
 
-// Logique API
+// Logique de l'API
 async function loadTasks() {
-    const res = await fetch(API + "/tasks");
-    const tasks = await res.json();
-    const list = document.getElementById("list");
-    if (!list) return;
-    list.innerHTML = tasks.map(t => `
-        <li class="task-item">
-            <span>${t.title}</span>
-            <button class="btn-delete" onclick="deleteTask(${t.id})">Supprimer</button>
-        </li>
-    `).join('');
+    try {
+        const res = await fetch(API + "/tasks");
+        const tasks = await res.json();
+        const list = document.getElementById("list");
+        if (!list) return;
+        list.innerHTML = tasks.map(t => `
+            <li class="task-item">
+                <span>${t.title}</span>
+                <button class="btn-delete" onclick="deleteTask(${t.id})">Supprimer</button>
+            </li>
+        `).join('');
+    } catch (err) {
+        console.error("Erreur chargement tâches:", err);
+    }
 }
 
 async function addTask() {
     const input = document.getElementById("taskInput");
     const title = input.value.trim();
     if (!title) return;
-    await fetch(API + "/tasks", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title })
-    });
-    input.value = "";
-    loadTasks();
+    
+    try {
+        await fetch(API + "/tasks", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ title })
+        });
+        input.value = "";
+        loadTasks();
+    } catch (err) {
+        console.error("Erreur ajout tâche:", err);
+    }
 }
 
 async function deleteTask(id) {
-    await fetch(API + "/tasks/" + id, { method: "DELETE" });
-    loadTasks();
+    try {
+        await fetch(API + "/tasks/" + id, { method: "DELETE" });
+        loadTasks();
+    } catch (err) {
+        console.error("Erreur suppression tâche:", err);
+    }
 }
 
 async function updateStats() {
-    const res = await fetch(API + "/tasks");
-    const tasks = await res.json();
-    document.getElementById('statCount').innerText = `Vous avez actuellement ${tasks.length} tâches en attente.`;
+    try {
+        const res = await fetch(API + "/tasks");
+        const tasks = await res.json();
+        const statElem = document.getElementById('statCount');
+        if (statElem) {
+            statElem.innerText = `Vous avez actuellement ${tasks.length} tâches en attente.`;
+        }
+    } catch (err) {
+        console.error("Erreur stats:", err);
+    }
 }
 
-// Initialisation
+// Listener pour le bouton burger
+if (burger) {
+    burger.addEventListener('click', () => {
+        nav.classList.toggle('active');
+        burger.classList.toggle('toggle');
+    });
+}
+
+// Initialisation au chargement
 navigateTo('home');
