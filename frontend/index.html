@@ -1,70 +1,27 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <title>Todo App</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionnaire Infra - MDS</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
+    <header>
+        <nav>
+            <div class="logo">MDS<span>Cloud</span></div>
+            <ul class="nav-links">
+                <li><a href="#" onclick="navigateTo('home')">Accueil</a></li>
+                <li><a href="#" onclick="navigateTo('todo')">Ma Liste</a></li>
+                <li><a href="#" onclick="navigateTo('stats')">Statistiques</a></li>
+                <li><a href="#" onclick="navigateTo('infra')">Infos Serveur</a></li>
+            </ul>
+        </nav>
+    </header>
 
-  <div class="container">
-    <h1>Todo App</h1>
+    <main id="content">
+        </main>
 
-    <div class="input-group">
-      <input id="taskInput" placeholder="Nouvelle tâche..." />
-      <button onclick="addTask()">Ajouter</button>
-    </div>
-
-    <ul id="list"></ul>
-  </div>
-
-  <script>
-    const API = "https://todo-list-app-0p2s.onrender.com";
-    async function loadTasks() {
-      const res = await fetch(API + "/tasks");
-      const tasks = await res.json();
-      const list = document.getElementById("list");
-      list.innerHTML = "";
-
-      tasks.forEach(t => {
-        list.innerHTML += `
-          <li>
-            ${t.title}
-            <button onclick="deleteTask(${t.id})">X</button>
-          </li>
-        `;
-      });
-    }
-
-    async function addTask() {
-      const input = document.getElementById("taskInput");
-      const title = input.value.trim();
-
-      if (!title) return;
-
-      await fetch(API + "/tasks", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title })
-      });
-
-      input.value = "";
-      loadTasks();
-    }
-
-    async function deleteTask(id) {
-      await fetch(API + "/tasks/" + id, { method: "DELETE" });
-      loadTasks();
-    }
-
-    // UX BONUS : entrer = ajouter
-    document.getElementById("taskInput").addEventListener("keypress", function(e) {
-      if (e.key === "Enter") addTask();
-    });
-
-    loadTasks();
-  </script>
-
+    <script src="app.js"></script>
 </body>
 </html>

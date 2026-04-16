@@ -21,7 +21,7 @@ L'application a été conçue pour répondre aux critères de la grille d'évalu
 ## 🔒 Sécurité & Bonnes Pratiques
 - **HTTPS :** Toutes les communications sont sécurisées via SSL (certificats automatiques Render/Vercel).
 - **CORS :** Configuration stricte du partage de ressources entre domaines.
-- **Variables d'environnement :** Utilisation de `process.env.PORT` pour une configuration dynamique du serveur.
+- **Variables d'environnement :** Utilisation de `proce ss.env.PORT` pour une configuration dynamique du serveur.
 - **Gestion des secrets :** Aucune clé sensible ou identifiant n'est stocké en dur dans le code source (`.gitignore` configuré).
 
 ## 📦 Installation en local
